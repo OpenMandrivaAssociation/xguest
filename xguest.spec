@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.7
-Release: %mkrel 1
+Release: %mkrel 2
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
@@ -13,7 +13,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires(pre): pam >= 0.99.8.1
 # fedora has splited sabayon-apply to have smaller requires:
 Requires(post): sabayon sabayon-admin
-Requires: gdm >= 2.20.10-6mdv
+Requires: dm
+Conflicts: gdm < 2.20.10-6mdv
+Conflicts: kdm < 2:4.3.1-12mdv
+Conflicts: xdm < 1.1.8-4mdv
 
 # TODO:
 # - check if /usr/sbin/gdm-safe-restart is needed in /etc/X11.gdm/PostSession/Default
