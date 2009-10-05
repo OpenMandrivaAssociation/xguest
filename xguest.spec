@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.7
-Release: %mkrel 2
+Release: %mkrel 3
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
@@ -23,7 +23,7 @@ Conflicts: xdm < 1.1.8-4mdv
 # - prevent logging on console
 
 %description
-Installing this package sets up the xguest user to be used as a temporary
+Installing this package sets up the guest user to be used as a temporary
 account to switch to or as a kiosk user account.
 The user is only allowed to log in via gdm.  The home and temporary directories
 of the user will be polyinstantiated and mounted on tmpfs.
@@ -46,11 +46,11 @@ accessible from the console too.
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/desktop-profiles
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/security/namespace.d/ls
 install -m0644 xguest.zip %{buildroot}/%{_sysconfdir}/desktop-profiles/
-install -m0644 xguest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
+install -m0644 guest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
 
 %pre
 if [ $1 -eq 1 ]; then
-	useradd -p '' -c "Guest" xguest || :
+	useradd -p '' -c "Guest" guest || :
 fi
 
 %post
@@ -63,11 +63,11 @@ mkdir /etc/skel/.gnome2 2> /dev/null
 /usr/bin/python << __eof
 from sabayon import userdb
 db = userdb.get_database()
-db.set_profile("xguest", "xguest.zip")
+db.set_profile("guest", "xguest.zip")
 __eof
 
 # prevent remote login:
-echo xguest >> /etc/ssh/denyusers 
+echo guest >> /etc/ssh/denyusers 
 
 fi
 
@@ -83,13 +83,13 @@ if [ $1 -eq 0 ]; then
 /usr/bin/python << __eof
 from sabayon import userdb
 db = userdb.get_database()
-db.set_profile("xguest", "")
+db.set_profile("guest", "")
 __eof
 
-userdel -r xguest
+userdel -r guest
 
 # remove forbiden SSH:
-sed -i '/^xguest/d' /etc/ssh/denyusers
+sed -i '/^guest/d' /etc/ssh/denyusers
 
 fi
 
