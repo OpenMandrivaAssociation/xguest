@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.7
-Release: %mkrel 3
+Release: %mkrel 4
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
@@ -10,8 +10,8 @@ patch:   xguest-namespace.patch
 URL:     http://people.fedoraproject.org/~dwalsh/xguest/
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires(pre): pam >= 0.99.8.1
-Requires(post): sabayon sabayon-admin
+Requires(pre): pam >= 0.99.8.1 python-sabayon
+Requires(post): python-sabayon
 Requires: dm
 Conflicts: gdm < 2.20.10-6mdv
 Conflicts: kdm < 2:4.3.1-12mdv
