@@ -11,7 +11,6 @@ URL:     http://people.fedoraproject.org/~dwalsh/xguest/
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires(pre): pam >= 0.99.8.1
-# fedora has splited sabayon-apply to have smaller requires:
 Requires(post): sabayon sabayon-admin
 Requires: dm
 Conflicts: gdm < 2.20.10-6mdv
