@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.7
-Release: %mkrel 8
+Release: %mkrel 7
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
@@ -10,12 +10,12 @@ patch:   xguest-namespace.patch
 URL:     http://people.fedoraproject.org/~dwalsh/xguest/
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-#Requires(pre): pam >= 0.99.8.1 python-sabayon
-#Requires(post): python-sabayon
+Requires(pre): pam >= 0.99.8.1 python-sabayon
+Requires(post): python-sabayon
 Requires: dm
-#Conflicts: gdm < 2.20.10-6mdv
-#Conflicts: kdm < 2:4.3.1-12mdv
-#Conflicts: xdm < 1.1.8-4mdv
+Conflicts: gdm < 2.20.10-6mdv
+Conflicts: kdm < 2:4.3.1-12mdv
+Conflicts: xdm < 1.1.8-4mdv
 
 # TODO:
 # - check if /usr/sbin/gdm-safe-restart is needed in /etc/X11.gdm/PostSession/Default
@@ -49,7 +49,7 @@ install -m0644 guest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
 
 %pre
 if [ $1 -eq 1 ]; then
-	useradd -K UID_MIN=10000 -p '' -c "Guest" guest || :
+	useradd -K UID_MIN=1000 -p '' -c "Guest" guest || :
 fi
 
 %post
