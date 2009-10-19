@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.7
-Release: %mkrel 7
+Release: %mkrel 9
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
@@ -49,7 +49,7 @@ install -m0644 guest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
 
 %pre
 if [ $1 -eq 1 ]; then
-	useradd -K UID_MIN=1000 -p '' -c "Guest" guest || :
+	useradd -K UID_MIN=10000 -p '' -c "Guest" guest || :
 fi
 
 %post
