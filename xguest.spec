@@ -49,7 +49,7 @@ install -m0644 xguest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
 
 %pre
 if [ $1 -eq 1 ]; then
-	useradd -K UID_MIN=10000 -p '' -c "Guest" xguest || :
+	useradd -K UID_MIN=10000 -p '' -c "Guest Account" xguest || :
 fi
 
 %post
