@@ -47,13 +47,10 @@ accessible from the console too.
 install -m0644 xguest.zip %{buildroot}/%{_sysconfdir}/desktop-profiles/
 install -m0644 xguest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
 
-%pre
-if [ $1 -eq 1 ]; then
-	useradd -K UID_MIN=10000 -p '' -c "Guest Account" xguest || :
-fi
 
-%post
-if [ $1 -eq 1 ]; then
+mkdir -p %{buildroot}%{_bindir}
+cat > %{buildroot}%{_bindir}/xguest-add-helper <<EOF
+useradd -K UID_MIN=10000 -p '' -c "Guest Account" xguest || :
 
 # Add two directories to /etc/skell so pam_namespace will label properly
 mkdir /etc/skel/.mozilla 2> /dev/null
@@ -67,11 +64,16 @@ __eof
 
 # prevent remote login:
 echo xguest >> /etc/ssh/denyusers 
+EOF
 
+%post
+if [ $1 -eq 1 ]; then
+	xguest-add-helper
 fi
 
 %files
 %defattr(-,root,root)
+%attr(755,root,root) %_bindir/*
 %config(noreplace) %{_sysconfdir}/desktop-profiles/xguest.zip
 %{_sysconfdir}/security/namespace.d/
 %doc README LICENSE
