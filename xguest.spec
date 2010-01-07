@@ -57,8 +57,14 @@ mkdir /etc/skel/.mozilla 2> /dev/null
 mkdir /etc/skel/.gnome2 2> /dev/null
 
 /usr/bin/python << __eof
+%if %mdkversion > 201000
+from sabayon import systemdb
+db = systemdb.get_user_database()
+%else
 from sabayon import userdb
 db = userdb.get_database()
+%endif
+
 db.set_profile("xguest", "xguest.zip")
 __eof
 
@@ -90,8 +96,13 @@ fi
 if [ $1 -eq 0 ]; then
 
 /usr/bin/python << __eof
+%if %mdkversion > 201000
+from sabayon import systemdb
+db = systemdb.get_user_database()
+%else
 from sabayon import userdb
 db = userdb.get_database()
+%endif
 db.set_profile("xguest", "")
 __eof
 
