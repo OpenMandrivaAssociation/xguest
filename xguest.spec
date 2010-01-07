@@ -64,6 +64,12 @@ __eof
 
 # prevent remote login:
 echo xguest >> /etc/ssh/denyusers 
+
+# prevent accessing most configuration tools (mcc still available with root password)
+for i in /etc/pam.d/{mandriva-simple-auth,simple_root_authen,urpmi.update}; do
+	fgrep -q xguest \$i && continue
+	echo -e "\nauth\trequired\tpam_succeed_if.so\tquiet user != xguest" >> \$i
+done
 EOF
 
 %post
