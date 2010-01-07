@@ -1,12 +1,15 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.8
-Release: %mkrel 1
+Release: %mkrel 2
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
 Source:  http://people.fedoraproject.org/~dwalsh/xguest/%{name}-%{version}.tar.bz2
+Source10: mkxguesthome
 patch:   xguest-namespace.patch
+# (tv) prevent accessing other people accounts:
+patch1: xguest-namespace2.patch
 URL:     http://people.fedoraproject.org/~dwalsh/xguest/
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -34,6 +37,7 @@ accessible from the console too.
 %prep
 %setup -q
 %patch -p1 -b .namespace
+%patch1 -p1 -b .home
 
 %build
 
@@ -46,6 +50,8 @@ accessible from the console too.
 %{__mkdir} -p %{buildroot}/%{_sysconfdir}/security/namespace.d/ls
 install -m0644 xguest.zip %{buildroot}/%{_sysconfdir}/desktop-profiles/
 install -m0644 xguest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
+
+install -m0755 %SOURCE10 %{buildroot}%{_sysconfdir}/security/namespace.d/
 
 # (tv) Using UID higher than UID_MAX=60000 from /etc/login.defs:
 mkdir -p %{buildroot}%{_bindir}
