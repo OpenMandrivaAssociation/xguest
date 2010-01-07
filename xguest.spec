@@ -63,7 +63,9 @@ db.set_profile("xguest", "xguest.zip")
 __eof
 
 # prevent remote login:
-echo xguest >> /etc/ssh/denyusers 
+if ! grep -q xguest /etc/ssh/denyusers; then
+	echo xguest >> /etc/ssh/denyusers
+fi
 
 # prevent accessing most configuration tools (mcc still available with root password)
 for i in /etc/pam.d/{mandriva-simple-auth,simple_root_authen,urpmi.update}; do
