@@ -64,6 +64,8 @@ install -m0755 %SOURCE10 %{buildroot}%{_sysconfdir}/security/namespace.d/
 mkdir -p %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/xguest-add-helper <<EOF
 groupdel xguest 2>/dev/null
+userdel -r xguest 2>/dev/null
+
 useradd -s /bin/rbash -K UID_MIN=61000 -K GID_MIN=61000 %grp_option -p '' -c "Guest Account" xguest || :
 
 # Add two directories to /etc/skell so pam_namespace will label properly
