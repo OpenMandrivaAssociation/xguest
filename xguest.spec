@@ -20,6 +20,13 @@ Conflicts: gdm < 2.20.10-6mdv
 Conflicts: kdm < 2:4.3.1-12mdv
 Conflicts: xdm < 1.1.8-4mdv
 
+%if %mdkversion > 201000
+%define grp_option -U
+%else
+%define grp_option %nil
+%endif
+
+
 # TODO:
 # - check if /usr/sbin/gdm-safe-restart is needed in /etc/X11.gdm/PostSession/Default
 # - prevent logging on console
@@ -57,7 +64,7 @@ install -m0755 %SOURCE10 %{buildroot}%{_sysconfdir}/security/namespace.d/
 mkdir -p %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/xguest-add-helper <<EOF
 groupdel xguest
-useradd -s /bin/rbash -K UID_MIN=61000 -K GID_MIN=61000 -U -p '' -c "Guest Account" xguest || :
+useradd -s /bin/rbash -K UID_MIN=61000 -K GID_MIN=61000 %grp_option -p '' -c "Guest Account" xguest || :
 
 # Add two directories to /etc/skell so pam_namespace will label properly
 mkdir /etc/skel/.mozilla 2> /dev/null
