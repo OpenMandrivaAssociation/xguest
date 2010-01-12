@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.8
-Release: %mkrel 3
+Release: %mkrel 4
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
@@ -67,7 +67,7 @@ cat > %{buildroot}%{_bindir}/xguest-add-helper <<EOF
 groupdel xguest 2>/dev/null
 userdel -r xguest 2>/dev/null
 
-useradd -s /bin/rbash -K UID_MIN=61000 -K GID_MIN=61000 %grp_option -p '' -c "Guest Account" xguest || :
+useradd -s /bin/rbash -K UID_MIN=61000 -K UID_MAX=65000 -K GID_MIN=61000 -K GID_MAX=65000 %grp_option -p '' -c "Guest Account" xguest || :
 
 # Add two directories to /etc/skell so pam_namespace will label properly
 mkdir /etc/skel/.mozilla 2> /dev/null
@@ -131,6 +131,6 @@ sed -i '/^xguest/d' /etc/ssh/denyusers
 
 fi
 
-%triggerun -- xguest <= 1.0.8-2mdv2010.1
+%triggerun -- xguest <= 1.0.8-3mdv2010.1
 userdel -r guest 2>/dev/null
 xguest-add-helper
