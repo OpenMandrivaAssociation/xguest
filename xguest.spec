@@ -63,7 +63,7 @@ install -m0755 %SOURCE10 %{buildroot}%{_sysconfdir}/security/namespace.d/
 # (tv) Using UID higher than UID_MAX=60000 from /etc/login.defs:
 mkdir -p %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/xguest-add-helper <<EOF
-groupdel xguest
+groupdel xguest 2>/dev/null
 useradd -s /bin/rbash -K UID_MIN=61000 -K GID_MIN=61000 %grp_option -p '' -c "Guest Account" xguest || :
 
 # Add two directories to /etc/skell so pam_namespace will label properly
@@ -129,6 +129,6 @@ sed -i '/^xguest/d' /etc/ssh/denyusers
 fi
 
 %triggerun -- xguest <= 1.0.8-2mdv2010.1
-userdel -r guest
-groupdel xguest
+userdel -r guest 2>/dev/null
+groupdel xguest 2>/dev/null
 xguest-add-helper
