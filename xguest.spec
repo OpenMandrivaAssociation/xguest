@@ -130,5 +130,4 @@ fi
 
 %triggerun -- xguest <= 1.0.8-2mdv2010.1
 userdel -r guest 2>/dev/null
-groupdel xguest 2>/dev/null
 xguest-add-helper
