@@ -129,6 +129,6 @@ sed -i '/^xguest/d' /etc/ssh/denyusers
 fi
 
 %triggerun -- xguest <= 1.0.8-2mdv2010.1
-userdel guest
+userdel -r guest
 groupdel xguest
 xguest-add-helper
