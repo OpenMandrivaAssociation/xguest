@@ -63,6 +63,7 @@ install -m0755 %SOURCE10 %{buildroot}%{_sysconfdir}/security/namespace.d/
 # (tv) Using UID higher than UID_MAX=60000 from /etc/login.defs:
 mkdir -p %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/xguest-add-helper <<EOF
+#!/bin/sh
 groupdel xguest 2>/dev/null
 userdel -r xguest 2>/dev/null
 
