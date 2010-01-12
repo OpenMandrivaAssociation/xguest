@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.8
-Release: %mkrel 4
+Release: %mkrel 5
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
@@ -131,6 +131,6 @@ sed -i '/^xguest/d' /etc/ssh/denyusers
 
 fi
 
-%triggerun -- xguest <= 1.0.8-3mdv2010.1
+%triggerun -- xguest <= 1.0.8-3mdv2010.0
 userdel -r guest 2>/dev/null
 xguest-add-helper
