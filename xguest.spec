@@ -1,7 +1,7 @@
 Summary: Creates xguest user as a locked down user 
 Name: xguest
 Version: 1.0.10
-Release: 3
+Release: 4
 License: GPLv2+
 Group:   System/Base
 BuildArch: noarch
