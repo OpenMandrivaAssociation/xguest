@@ -1,7 +1,7 @@
 Summary:	Creates xguest user as a locked down user 
 Name:		xguest
 Version: 	1.0.10
-Release: 	12
+Release: 	13
 License: 	GPLv2+
 Group:   	System/Base
 BuildArch: 	noarch
@@ -57,7 +57,7 @@ case \$(env | grep -m 1 -i lang | cut -d= -f2 | cut -d. -f1) in
 	*) comment_xguest="Guest Account";;
 esac
 
-useradd -s /bin/rbash -K UID_MIN=61000 -K UID_MAX=65000 -K GID_MIN=61000 -K GID_MAX=65000 %grp_option -p '' -c "\$comment_xguest" xguest || :
+useradd -s /bin/rbash -K UID_MIN=59000 -K UID_MAX=60000 -K GID_MIN=59000 -K GID_MAX=60000 %grp_option -p '' -c "\$comment_xguest" xguest || :
 
 # prevent remote login:
 if [ -e /etc/ssh/denyusers ]; then
