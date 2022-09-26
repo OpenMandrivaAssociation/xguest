@@ -1,7 +1,7 @@
 Summary:	Creates xguest user as a locked down user 
 Name:		xguest
 Version: 	1.0.10
-Release: 	17
+Release: 	18
 License: 	GPLv2+
 Group:   	System/Base
 BuildArch: 	noarch
@@ -41,8 +41,8 @@ install -m0755 %{SOURCE10} %{buildroot}%{_sysconfdir}/security/namespace.d/
 
 mkdir -p %{buildroot}%{_sysusersdir}
 cat >%{buildroot}%{_sysusersdir}/xguest.conf <<EOF
-g xguest - -
-u xguest - "Guest User" /home/xguest %{_bindir}/rbash
+g xguest 59123 -
+u xguest 59123 "Guest User" /home/xguest %{_bindir}/rbash
 EOF
 
 mkdir -p %{buildroot}%{_bindir}
