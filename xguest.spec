@@ -1,7 +1,7 @@
 Summary:	Creates xguest user as a locked down user 
 Name:		xguest
 Version: 	1.0.10
-Release: 	16
+Release: 	17
 License: 	GPLv2+
 Group:   	System/Base
 BuildArch: 	noarch
@@ -12,7 +12,7 @@ Patch1: 	xguest-namespace.patch
 URL:     	http://people.fedoraproject.org/~dwalsh/xguest/
 
 Requires(pre):	pam >= 0.99.8.1
-Requires(post): usermode-consoleonly
+BuildRequires:	systemd-rpm-macros
 
 %define grp_option -U
 
@@ -27,26 +27,27 @@ enforcing mode and where it's only accessible through gdm/kdm/xdm, it's
 accessible from the console too.
 
 %prep
-%setup -q
-%patch1 -p1 -b .home
+%autosetup -p1
 
 %build
 
 %install
-%{__mkdir} -p %{buildroot}/%{_sysconfdir}/desktop-profiles
-%{__mkdir} -p %{buildroot}/%{_sysconfdir}/security/namespace.d/ls
+mkdir -p %{buildroot}/%{_sysconfdir}/desktop-profiles
+mkdir -p %{buildroot}/%{_sysconfdir}/security/namespace.d/
 install -m0644 xguest.zip %{buildroot}/%{_sysconfdir}/desktop-profiles/
 install -m0644 xguest.conf %{buildroot}/%{_sysconfdir}/security/namespace.d/
 
 install -m0755 %{SOURCE10} %{buildroot}%{_sysconfdir}/security/namespace.d/
 
-# (tv) Using UID higher than UID_MAX=60000 from /etc/login.defs:
+mkdir -p %{buildroot}%{_sysusersdir}
+cat >%{buildroot}%{_sysusersdir}/xguest.conf <<EOF
+g xguest - -
+u xguest - "Guest User" /home/xguest %{_bindir}/rbash
+EOF
+
 mkdir -p %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/xguest-add-helper <<EOF
 #!/bin/sh
-groupdel xguest 2>/dev/null
-userdel -r xguest 2>/dev/null
-
 case \$(env | grep -m 1 -i lang | cut -d= -f2 | cut -d. -f1) in
 	fr_FR) comment_xguest="Compte invité";;
 	de_DE) comment_xguest="Gast-Zugang";;
@@ -56,8 +57,7 @@ case \$(env | grep -m 1 -i lang | cut -d= -f2 | cut -d. -f1) in
 	pt_PT) comment_xguest="Conta convidado";;
 	*) comment_xguest="Guest Account";;
 esac
-
-useradd -s /bin/rbash -K UID_MIN=59000 -K UID_MAX=60000 -K GID_MIN=59000 -K GID_MAX=60000 %grp_option -p '' -c "\$comment_xguest" xguest || :
+[ "$comment_xguest" != "Guest User" ] && sed -i -e "s,Guest User,$comment_xguest," %{_sysusersdir}/xguest.conf
 
 # prevent remote login:
 if [ -e /etc/ssh/denyusers ]; then
@@ -67,7 +67,7 @@ if [ -e /etc/ssh/denyusers ]; then
 fi
 
 # prevent accessing most configuration tools (mcc still available with root password)
-for i in /etc/pam.d/{mandriva-simple-auth,simple_root_authen,urpmi.update}; do
+for i in /etc/pam.d/{mandriva-simple-auth,simple_root_authen}; do
 	if [ -e \$i ]; then
 		grep -F -q xguest \$i && continue
 	fi
@@ -82,18 +82,9 @@ fi
 
 %preun
 if [ $1 -eq 0 ]; then
-
-userdel -r xguest
-groupdel xguest
-
-# remove forbiden SSH:
-sed -i '/^xguest/d' /etc/ssh/denyusers
-
+	# remove forbiden SSH:
+	sed -i '/^xguest/d' /etc/ssh/denyusers
 fi
-
-%triggerun -- xguest <= 1.0.8-3mdv2010.0
-userdel -r guest 2>/dev/null
-xguest-add-helper
 
 %triggerin -- openssh-server
 if ! grep -q xguest /etc/ssh/denyusers; then
@@ -105,4 +96,5 @@ fi
 %dir %{_sysconfdir}/desktop-profiles
 %config(noreplace) %{_sysconfdir}/desktop-profiles/xguest.zip
 %{_sysconfdir}/security/namespace.d/
+%{_sysusersdir}/xguest.conf
 %doc README LICENSE

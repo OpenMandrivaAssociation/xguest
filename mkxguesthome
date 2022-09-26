@@ -1,2 +1,8 @@
 #!/bin/bash
+umount -f /home/xguest
+rm -rf /home/xguest
 mkdir -p /home/xguest
+chown xguest:xguest /home/xguest
+mount -t tmpfs none /home/xguest
+mount --make-private /home/xguest
+chown -R xguest:xguest /home/xguest
