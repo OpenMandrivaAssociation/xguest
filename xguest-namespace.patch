@@ -7,4 +7,3 @@ diff -p -up ./xguest.conf.home ./xguest.conf
  /var/tmp        tmpfs   tmpfs   ~xguest
 +/home           tmpfs   tmpfs:iscript=mkxguesthome   ~xguest
  $HOME           tmpfs   tmpfs   ~xguest
- 
