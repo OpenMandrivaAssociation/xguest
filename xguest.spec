@@ -9,7 +9,7 @@ Source:  	http://people.fedoraproject.org/~dwalsh/xguest/%{name}-%{version}.tar.
 Source10: 	mkxguesthome
 # (tv) prevent accessing other people accounts:
 Patch1: 	xguest-namespace.patch
-URL:     	http://people.fedoraproject.org/~dwalsh/xguest/
+URL:     	https://people.fedoraproject.org/~dwalsh/xguest/
 
 Requires(pre):	pam >= 0.99.8.1
 Requires(post): usermode-consoleonly
